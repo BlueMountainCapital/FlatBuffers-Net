@@ -1,0 +1,5 @@
+﻿file:net/FlatBuffers/ByteBuffer.cs Runtime/ByteBuffer.cs
+file:net/FlatBuffers/FlatBufferBuilder.cs Runtime/FlatBufferBuilder.cs
+file:net/FlatBuffers/FlatBufferConstants.cs Runtime/FlatBufferConstants.cs
+file:net/FlatBuffers/Struct.cs Runtime/Struct.cs
+file:net/FlatBuffers/Table.cs Runtime/Table.cs

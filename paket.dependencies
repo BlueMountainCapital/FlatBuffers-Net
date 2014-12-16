@@ -1,0 +1,5 @@
+﻿github google/flatbuffers:v1.0.3 net/FlatBuffers/ByteBuffer.cs
+github google/flatbuffers:v1.0.3 net/FlatBuffers/FlatBufferBuilder.cs
+github google/flatbuffers:v1.0.3 net/FlatBuffers/FlatBufferConstants.cs
+github google/flatbuffers:v1.0.3 net/FlatBuffers/Struct.cs
+github google/flatbuffers:v1.0.3 net/FlatBuffers/Table.cs
