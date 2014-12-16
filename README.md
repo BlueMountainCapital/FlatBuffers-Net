@@ -8,3 +8,7 @@ for .Net.
 Limitations
 -----------
 Union not supported at this time.
+
+Continuous Integration
+----------------------
+- Windows on .NET: [![Build status](https://ci.appveyor.com/api/projects/status/we4dt1mvdwnjxtqg?svg=true)](https://ci.appveyor.com/project/dcharbon/flatbuffers-net)
