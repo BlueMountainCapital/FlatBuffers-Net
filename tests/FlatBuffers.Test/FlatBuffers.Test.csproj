@@ -54,4 +54,5 @@
   <ProjectExtensions>
     <VisualStudio AllowExistingFolder="true" />
   </ProjectExtensions>
+  <Import Project="..\..\.paket\paket.targets" />
 </Project>
