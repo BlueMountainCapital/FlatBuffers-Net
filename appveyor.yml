@@ -1,0 +1,7 @@
+version: 0.1.0.{build}
+configuration: Release
+platform: Any CPU
+build:
+  publish_nuget: true
+  publish_nuget_symbols: true
+  verbosity: minimal
