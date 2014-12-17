@@ -45,9 +45,9 @@
     <Compile Include="RuntimeTypeModelTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\src\FlatBuffers-Net.csproj">
+    <ProjectReference Include="..\..\src\FlatBuffers\FlatBuffers.csproj">
       <Project>{f7278911-7a1e-4cef-be45-8976170f5811}</Project>
-      <Name>FlatBuffers-Net</Name>
+      <Name>FlatBuffers</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />

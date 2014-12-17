@@ -31,6 +31,26 @@
     <RootNamespace>FlatBuffers</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\..\paket-files\google\flatbuffers\net\FlatBuffers\ByteBuffer.cs">
+      <Paket>True</Paket>
+      <Link>Runtime/ByteBuffer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\paket-files\google\flatbuffers\net\FlatBuffers\FlatBufferBuilder.cs">
+      <Paket>True</Paket>
+      <Link>Runtime/FlatBufferBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\paket-files\google\flatbuffers\net\FlatBuffers\FlatBufferConstants.cs">
+      <Paket>True</Paket>
+      <Link>Runtime/FlatBufferConstants.cs</Link>
+    </Compile>
+    <Compile Include="..\..\paket-files\google\flatbuffers\net\FlatBuffers\Struct.cs">
+      <Paket>True</Paket>
+      <Link>Runtime/Struct.cs</Link>
+    </Compile>
+    <Compile Include="..\..\paket-files\google\flatbuffers\net\FlatBuffers\Table.cs">
+      <Paket>True</Paket>
+      <Link>Runtime/Table.cs</Link>
+    </Compile>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -50,15 +70,13 @@
     <Compile Include="FlatBufferWrapper.cs" />
     <Compile Include="Namespace.cs" />
     <Compile Include="Parser.cs" />
-    <Compile Include="Runtime\ByteBuffer.cs" />
-    <Compile Include="Runtime\FlatBufferBuilder.cs" />
-    <Compile Include="Runtime\FlatBufferConstants.cs" />
-    <Compile Include="Runtime\Struct.cs" />
-    <Compile Include="Runtime\Table.cs" />
     <Compile Include="StructDef.cs" />
     <Compile Include="SymbolTable.cs" />
     <Compile Include="TypeBuilder.cs" />
     <Compile Include="Value.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="paket.references" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
   <ProjectExtensions>

@@ -1,8 +1,10 @@
+*~
 *.swp
 *.suo
 *.user
+paket-files
 TestResults
-src/bin
-src/obj
-tests/bin
-tests/obj
+src/FlatBuffers/bin
+src/FlatBuffers/obj
+tests/FlatBuffers.Test/bin
+tests/FlatBuffers.Test/obj
