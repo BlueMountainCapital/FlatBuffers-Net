@@ -7,12 +7,12 @@ for .Net.
 
 Limitations
 -----------
-Union not supported at this time.
+Metadata not supported at this time.
 
 To Do
 -----
 * Annotations for synthesizing type models and .NET style serialization (ala protobuf-net).
-* Support for Union.
+* Support for metadata.
 * A better parser, with better error messages and exceptions.
 
 Continuous Integration

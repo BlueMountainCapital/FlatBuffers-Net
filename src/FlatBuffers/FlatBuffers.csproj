@@ -66,6 +66,7 @@
     <Compile Include="EnumDef.cs" />
     <Compile Include="EnumVal.cs" />
     <Compile Include="FieldDef.cs" />
+    <Compile Include="FlatBufferBuilderWrapper.cs" />
     <Compile Include="FlatBuffersType.cs" />
     <Compile Include="FlatBufferWrapper.cs" />
     <Compile Include="Namespace.cs" />

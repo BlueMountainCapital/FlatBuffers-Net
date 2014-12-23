@@ -16,8 +16,11 @@ namespace FlatBuffers.Test
             color.Add(new EnumVal {Name = "Green",}); // didn't set value
             color.Add(new EnumVal {Name = "Blue", Value = 2,});
 
-            //var any = _typeBuilder.AddUnion("Any");
-            //any.Add(new EnumVal {Name = "Monster"});
+            // each of the EnumVals should end up associated to a table.
+            var any = _typeBuilder.AddUnion("Any");
+            any.Add(new EnumVal { Name = "Monster" });
+            any.Add(new EnumVal { Name = "Weapon" });
+            any.Add(new EnumVal { Name = "Pickup" });
 
             var vec3 = _typeBuilder.AddStruct("Vec3");
             var vec3_x = vec3.AddField("x", new FlatBuffersType {BaseType = BaseType.Float});
@@ -39,6 +42,16 @@ namespace FlatBuffers.Test
                 new FlatBuffersType {BaseType = BaseType.UByte, EnumDef = color});
             var monster_minions = monster.AddField("minions",
                 new FlatBuffersType {BaseType = BaseType.Vector, ElementType = BaseType.Struct, StructDef = minion});
+
+            // should result in two fields, thingy which is a table and thingy_type for the type enum
+            var monster_thingy = monster.AddField("thingy",
+                new FlatBuffersType {BaseType = BaseType.Union, EnumDef = any});
+
+            var weapon = _typeBuilder.AddTable("Weapon");
+            var weapon_name = weapon.AddField("name", new FlatBuffersType {BaseType = BaseType.String});
+
+            var pickup = _typeBuilder.AddTable("Pickup");
+            var pickup_name = pickup.AddField("name", new FlatBuffersType {BaseType = BaseType.String});
 
             _typeBuilder.Compile();
 
@@ -68,8 +81,8 @@ namespace FlatBuffers.Test
             var builderWrapper = new FlatBufferBuilderWrapper(typeBuilder, builder);
             var monsterName = builderWrapper.CreateString("Fred");
             builderWrapper.StartVector("Monster", "inventory", 2);
-            builderWrapper.AddUChar(3); //idx 1
-            builderWrapper.AddUChar(2); //idx 0
+            builderWrapper.AddByte(3); //idx 1
+            builderWrapper.AddByte(2); //idx 0
             var monsterInventory = builderWrapper.EndVector();
             var minion1_name = builderWrapper.CreateString("Banana");
             var minion2_name = builderWrapper.CreateString("Ananab");
@@ -90,7 +103,7 @@ namespace FlatBuffers.Test
             builderWrapper.AddString("name", monsterName);
             builderWrapper.AddBool("friendly", true);
             builderWrapper.AddVector("inventory", monsterInventory);
-            builderWrapper.AddUChar("color", 2); // Blue
+            builderWrapper.AddByte("color", 2); // Blue
             builderWrapper.AddVector("minions", minions);
             builderWrapper.Finish(builderWrapper.EndTable());
             var beginData = builder.DataBuffer().position();
@@ -152,5 +165,89 @@ namespace FlatBuffers.Test
             Assert.AreEqual("Banana", (string)minionsAsArray[0]["name"]);
             Assert.AreEqual("Ananab", (string)minionsAsArray[1]["name"]);
         }
+
+        [TestMethod]
+        public void Union_Monster() {
+            CreateMonsterFlatBufferTypes();
+            var builder = new FlatBufferBuilder(1);
+            var builderWrapper = new FlatBufferBuilderWrapper(_typeBuilder, builder);
+            var monster1_name = builderWrapper.CreateString("Monster1");
+            builderWrapper.StartTable("Monster");
+            builderWrapper.AddString("name", monster1_name);
+            var monster1 = builderWrapper.EndTable();
+            var monster2_name = builderWrapper.CreateString("Monster2");
+            builderWrapper.StartTable("Monster");
+            builderWrapper.AddString("name", monster2_name);
+            builderWrapper.AddByte("thingy_type", 1); // Monster
+            builderWrapper.AddTable("thingy", monster1);
+            builderWrapper.Finish(builderWrapper.EndTable());
+            var beginData = builder.DataBuffer().position();
+            var countData = builder.DataBuffer().Length - beginData;
+            var byteBuffer = new ByteBuffer(builder.DataBuffer().Data.Skip(beginData).Take(countData).ToArray());
+            var wrapper = new FlatBufferWrapper(_typeBuilder, "Monster", byteBuffer);
+
+            Assert.AreEqual("Monster2", (string) wrapper["name"]);
+            Assert.AreEqual(1, (byte) wrapper["thingy_type"]);
+            var thingy_wrapper = (FlatBufferWrapper) wrapper["thingy"];
+            Assert.IsNotNull(thingy_wrapper);
+            Assert.AreEqual("Monster1", (string) thingy_wrapper["name"]);
+            Assert.AreEqual(0, (byte) thingy_wrapper["thingy_type"]); //None - not set!
+        }
+
+
+        [TestMethod]
+        public void Union_Weapon() {
+            CreateMonsterFlatBufferTypes();
+            var builder = new FlatBufferBuilder(1);
+            var builderWrapper = new FlatBufferBuilderWrapper(_typeBuilder, builder);
+            var weapon_name = builderWrapper.CreateString("Weapon");
+            builderWrapper.StartTable("Weapon");
+            builderWrapper.AddString("name", weapon_name);
+            var weapon = builderWrapper.EndTable();
+            var monster_name = builderWrapper.CreateString("Monster2");
+            builderWrapper.StartTable("Monster");
+            builderWrapper.AddByte("thingy_type", 2); // Weapon
+            builderWrapper.AddTable("thingy", weapon);
+            builderWrapper.AddString("name", monster_name);
+            builderWrapper.Finish(builderWrapper.EndTable());
+            var beginData = builder.DataBuffer().position();
+            var countData = builder.DataBuffer().Length - beginData;
+            var byteBuffer = new ByteBuffer(builder.DataBuffer().Data.Skip(beginData).Take(countData).ToArray());
+            var wrapper = new FlatBufferWrapper(_typeBuilder, "Monster", byteBuffer);
+
+            Assert.AreEqual("Monster2", (string) wrapper["name"]);
+            Assert.AreEqual(2, (byte) wrapper["thingy_type"]);
+            var thingy_wrapper = (FlatBufferWrapper) wrapper["thingy"];
+            Assert.IsNotNull(thingy_wrapper);
+            Assert.AreEqual("Weapon", (string) thingy_wrapper["name"]);
+        }
+
+        [TestMethod]
+        public void Union_Pickup() {
+            CreateMonsterFlatBufferTypes();
+            var builder = new FlatBufferBuilder(1);
+            var builderWrapper = new FlatBufferBuilderWrapper(_typeBuilder, builder);
+            var pickup_name = builderWrapper.CreateString("Pickup");
+            builderWrapper.StartTable("Pickup");
+            builderWrapper.AddString("name", pickup_name);
+            var pickup = builderWrapper.EndTable();
+            var monster_name = builderWrapper.CreateString("Monster2");
+            builderWrapper.StartTable("Monster");
+            builderWrapper.AddByte("thingy_type", 2); // Pickup
+            builderWrapper.AddTable("thingy", pickup);
+            builderWrapper.AddString("name", monster_name);
+            builderWrapper.Finish(builderWrapper.EndTable());
+            var beginData = builder.DataBuffer().position();
+            var countData = builder.DataBuffer().Length - beginData;
+            var byteBuffer = new ByteBuffer(builder.DataBuffer().Data.Skip(beginData).Take(countData).ToArray());
+            var wrapper = new FlatBufferWrapper(_typeBuilder, "Monster", byteBuffer);
+
+            Assert.AreEqual("Monster2", (string) wrapper["name"]);
+            Assert.AreEqual(2, (byte) wrapper["thingy_type"]);
+            var thingy_wrapper = (FlatBufferWrapper) wrapper["thingy"];
+            Assert.IsNotNull(thingy_wrapper);
+            Assert.AreEqual("Pickup", (string) thingy_wrapper["name"]);
+        }
+
     }
 }

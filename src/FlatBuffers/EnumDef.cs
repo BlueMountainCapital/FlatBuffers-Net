@@ -30,7 +30,7 @@ namespace FlatBuffers {
             long previousValue = long.MinValue;
             for (var i = 0; i < Values.Count; i++) {
                 var value = Values[i];
-                if (IsUnion && value.StructDef == null) {
+                if (IsUnion && value.Name != "NONE" && value.StructDef == null) {
                     value.StructDef = TypeBuilder.LookupOrCreateStruct(value.Name);
                 }
                 if (value.Value.HasValue && value.Value.Value < previousValue) {
@@ -48,15 +48,22 @@ namespace FlatBuffers {
             }
         }
 
-      public void ToSchema(StringBuilder builder) {
+        public void ToSchema(StringBuilder builder) {
             builder.AppendLine();
-            builder.Append("enum ");
-            builder.Append(Name);
-            builder.Append(" : ");
-            UnderlyingType.BaseType.ToSchema(builder);
+            if (IsUnion) {
+                builder.Append("union ");
+                builder.Append(Name);
+            }
+            else {
+                builder.Append("enum ");
+                builder.Append(Name);
+                builder.Append(" : ");
+                UnderlyingType.BaseType.ToSchema(builder);
+            }
             builder.Append(" {\n");
             var addComma = false;
             foreach (var enumVal in Values.Symbols) {
+                if (IsUnion && enumVal.Name == "NONE") continue;
                 if (addComma) builder.Append(", ");
                 else addComma = true;
                 enumVal.ToSchema(builder);

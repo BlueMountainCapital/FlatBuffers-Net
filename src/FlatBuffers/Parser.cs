@@ -324,13 +324,13 @@ namespace FlatBuffers
             return offset;
         }
 
-        public int ParseEnumDecl(int offset, string schemaStr) {
+        public int ParseEnumDecl(int offset, string schemaStr, bool isUnion) {
             offset = SkipWhitespace(offset, schemaStr);
             string name;
             offset = ParseIdentifier(offset, schemaStr, out name);
-            var underlyingType = BaseType.Int; // by default
+            var underlyingType = isUnion ? BaseType.UType : BaseType.Int; // by default
             offset = SkipWhitespace(offset, schemaStr);
-            if (schemaStr[offset] == ':') {
+            if (!isUnion && schemaStr[offset] == ':') {
                 offset++;
                 offset = SkipWhitespace(offset, schemaStr);
                 var tempType = new FlatBuffersType {BaseType = BaseType.None};
@@ -341,14 +341,17 @@ namespace FlatBuffers
                 throw new Exception("Enum must be a scalar type");
             }
             var enumDef = TypeBuilder.AddEnum(name, underlyingType);
+            if (isUnion) {
+                enumDef.UnderlyingType.EnumDef = enumDef;
+            }
             //TODO metadata, again, but as "attributes" on the enumDef
             offset = SkipWhitespace(offset, schemaStr);
             offset = Consume("{", offset, schemaStr);
-            offset = ParseEnumValDeclStar(offset, schemaStr, enumDef);
+            offset = ParseEnumValDeclStar(offset, schemaStr, enumDef, isUnion);
             return offset;
         }
 
-        private int ParseEnumValDeclStar(int offset, string schemaStr, EnumDef enumDef) {
+        private int ParseEnumValDeclStar(int offset, string schemaStr, EnumDef enumDef, bool isUnion) {
             var finished = false;
             var expectComma = false;
             while (offset < schemaStr.Length && !finished) {
@@ -365,13 +368,13 @@ namespace FlatBuffers
                     else {
                         expectComma = true;
                     }
-                    offset = ParseEnumValDecl(offset, schemaStr, enumDef);
+                    offset = ParseEnumValDecl(offset, schemaStr, enumDef, isUnion);
                 }
             }
             return offset;
         }
 
-        private int ParseEnumValDecl(int offset, string schemaStr, EnumDef enumDef) {
+        private int ParseEnumValDecl(int offset, string schemaStr, EnumDef enumDef, bool isUnion) {
             string identifier;
             string constantValue = null;
             offset = ParseIdentifier(offset, schemaStr, out identifier);
@@ -383,6 +386,7 @@ namespace FlatBuffers
             var enumVal = new EnumVal();
             enumVal.Name = identifier;
             if (constantValue != null) enumVal.Value = long.Parse(constantValue);
+            if (isUnion && enumVal.Value.Value != 0) enumVal.StructDef = TypeBuilder.LookupOrCreateStruct(identifier);
             enumDef.Add(enumVal);
             return offset;
         }
@@ -406,11 +410,10 @@ namespace FlatBuffers
                 offset = ParseStructDecl(offset, schemaStr);
             }
             else if (identifier == "enum") {
-                offset = ParseEnumDecl(offset, schemaStr);
+                offset = ParseEnumDecl(offset, schemaStr, false);
             }
             else if (identifier == "union") {
-                throw new Exception("Union not supported yet.");
-                //offset = ParseEnumDecl(offset, schemaStr);
+                offset = ParseEnumDecl(offset, schemaStr, true);
             }
             else if (identifier == "attribute") {
                 offset = ParseAttributeDecl(offset, schemaStr);

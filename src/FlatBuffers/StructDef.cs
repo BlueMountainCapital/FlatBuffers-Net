@@ -74,7 +74,7 @@ namespace FlatBuffers {
                     throw new Exception("nested_flatbuffer attribute may only apply to a vector of ubyte");
                 TypeBuilder.LookupOrCreateStruct(nested.constant);
             }
-            // If this field is a union, and it has a manually assigned id, teh automatically added type field should have an id as well (of N - 1).
+            // If this field is a union, and it has a manually assigned id, the automatically added type field should have an id as well (of N - 1).
             if (typeField != null) {
                 var attr = field.Id;
                 if (attr != null) {
