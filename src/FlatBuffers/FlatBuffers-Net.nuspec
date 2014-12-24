@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
-        <id>FlatBuffers-Net</id>
+        <id>$id$</id>
         <version>$version$</version>
-        <authors>BlueMountain Capital</authors>
+        <authors>$author$</authors>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>Google FlatBuffers for .Net</description>
+        <description>$description$</description>
     </metadata>
     <files>
         <file src="bin\Release\FlatBuffers-net.dll"

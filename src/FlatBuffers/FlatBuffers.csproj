@@ -60,6 +60,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="BaseType.cs" />
     <Compile Include="BaseTypeUtil.cs" />
     <Compile Include="Definition.cs" />
