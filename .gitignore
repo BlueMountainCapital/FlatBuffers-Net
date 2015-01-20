@@ -8,3 +8,4 @@ src/FlatBuffers/bin
 src/FlatBuffers/obj
 tests/FlatBuffers.Test/bin
 tests/FlatBuffers.Test/obj
+*.cache

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlatBuffers", "src\FlatBuffers\FlatBuffers.csproj", "{F7278911-7A1E-4CEF-BE45-8976170F5811}"
 EndProject
@@ -9,11 +9,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlatBuffers.Test", "tests\F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "project", "project", "{54BC6409-BF01-4BA5-8F7A-A54865A669A1}"
 	ProjectSection(SolutionItems) = preProject
+		appveyor.yml = appveyor.yml
 		src\FlatBuffers\FlatBuffers-Net.nuspec = src\FlatBuffers\FlatBuffers-Net.nuspec
+		src\FlatBuffers\FlatBuffers-Net.Unsafe.nuspec = src\FlatBuffers\FlatBuffers-Net.Unsafe.nuspec
 		paket.dependencies = paket.dependencies
 		paket.lock = paket.lock
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlatBuffers.Unsafe", "src\FlatBuffers\FlatBuffers.Unsafe.csproj", "{31F298DE-0761-4ECC-89CF-02FC4CE8B3EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlatBuffers.Unsafe.Test", "tests\FlatBuffers.Test\FlatBuffers.Unsafe.Test.csproj", "{0F9FD85E-D1E8-4996-B236-52F74661C1D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +35,14 @@ Global
 		{110217DA-C5CE-4AB4-8058-2B29FC71DD5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{110217DA-C5CE-4AB4-8058-2B29FC71DD5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{110217DA-C5CE-4AB4-8058-2B29FC71DD5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31F298DE-0761-4ECC-89CF-02FC4CE8B3EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31F298DE-0761-4ECC-89CF-02FC4CE8B3EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31F298DE-0761-4ECC-89CF-02FC4CE8B3EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31F298DE-0761-4ECC-89CF-02FC4CE8B3EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F9FD85E-D1E8-4996-B236-52F74661C1D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F9FD85E-D1E8-4996-B236-52F74661C1D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F9FD85E-D1E8-4996-B236-52F74661C1D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F9FD85E-D1E8-4996-B236-52F74661C1D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
