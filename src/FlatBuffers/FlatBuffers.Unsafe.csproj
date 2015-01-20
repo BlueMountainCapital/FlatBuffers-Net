@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FlatBuffers.Unsafe</RootNamespace>
-    <AssemblyName>FlatBuffers.Unsafe</AssemblyName>
+    <AssemblyName>FlatBuffers-Net.Unsafe</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

@@ -8,7 +8,7 @@
         <description>$description$</description>
     </metadata>
     <files>
-        <file src="bin\Release\FlatBuffers-net.dll"
+        <file src="bin\Release\FlatBuffers-Net.dll"
               target="lib\net40" />
     </files>
 </package>
