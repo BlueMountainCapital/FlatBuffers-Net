@@ -79,9 +79,13 @@ namespace FlatBuffers
             }
             else if (fieldDef.Value.type.BaseType == BaseType.Struct) {
                 // assuming tables for now!
-                return fieldDef.Value.type.StructDef.Fixed || o != 0
-                    ? new FlatBufferWrapper(fieldDef.Value.type.StructDef, o + bb_pos, bb)
-                    : null;
+                if (fieldDef.Value.type.StructDef.Fixed) {
+                    return new FlatBufferWrapper(fieldDef.Value.type.StructDef, o + bb_pos, bb);
+                }
+                else if (o != 0) {
+                    return new FlatBufferWrapper(fieldDef.Value.type.StructDef, __indirect(o + bb_pos), bb);
+                }
+                return null;
             }
             else if (fieldDef.Value.type.BaseType == BaseType.Union) {
                 var unionEnumDef = fieldDef.Value.type.EnumDef;

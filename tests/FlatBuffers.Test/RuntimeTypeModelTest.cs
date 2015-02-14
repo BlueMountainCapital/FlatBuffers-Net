@@ -42,6 +42,8 @@ namespace FlatBuffers.Test
                 new FlatBuffersType {BaseType = BaseType.UByte, EnumDef = color});
             var monster_minions = monster.AddField("minions",
                 new FlatBuffersType {BaseType = BaseType.Vector, ElementType = BaseType.Struct, StructDef = minion});
+            var monster_main_minion = monster.AddField("mainMinion",
+                new FlatBuffersType {BaseType = BaseType.Struct, StructDef = minion});
 
             // should result in two fields, thingy which is a table and thingy_type for the type enum
             var monster_thingy = monster.AddField("thingy",
@@ -86,12 +88,16 @@ namespace FlatBuffers.Test
             var monsterInventory = builderWrapper.EndVector();
             var minion1_name = builderWrapper.CreateString("Banana");
             var minion2_name = builderWrapper.CreateString("Ananab");
+            var main_minion_name = builderWrapper.CreateString("MainMinion");
             builderWrapper.StartTable("Minion");
             builderWrapper.AddString("name", minion1_name);
             var minion1 = builderWrapper.EndTable();
             builderWrapper.StartTable("Minion");
             builderWrapper.AddString("name", minion2_name);
             var minion2 = builderWrapper.EndTable();
+            builderWrapper.StartTable("Minion");
+            builderWrapper.AddString("name", main_minion_name);
+            var mainMinion = builderWrapper.EndTable();
             builderWrapper.StartVector("Monster", "minions", 2);
             builderWrapper.AddTable(minion2); //idx 1
             builderWrapper.AddTable(minion1); //idx 0
@@ -105,6 +111,7 @@ namespace FlatBuffers.Test
             builderWrapper.AddVector("inventory", monsterInventory);
             builderWrapper.AddByte("color", 2); // Blue
             builderWrapper.AddVector("minions", minions);
+            builderWrapper.AddTable("mainMinion", mainMinion);
             builderWrapper.Finish(builderWrapper.EndTable());
             var beginData = builder.DataBuffer().position();
             var countData = builder.DataBuffer().Length - beginData;
@@ -117,22 +124,23 @@ namespace FlatBuffers.Test
             CreateMonsterFlatBufferTypes();
             var wrapper = GetMonsterWrapper(_typeBuilder);
             var posWrapper = (FlatBufferWrapper) wrapper["pos"];
-            Assert.AreEqual(1.0f, (float)posWrapper["x"]);
-            Assert.AreEqual(2.0f, (float)posWrapper["y"]);
-            Assert.AreEqual(3.0f, (float)posWrapper["z"]);
+            Assert.AreEqual(1.0f, (float) posWrapper["x"]);
+            Assert.AreEqual(2.0f, (float) posWrapper["y"]);
+            Assert.AreEqual(3.0f, (float) posWrapper["z"]);
             Assert.AreEqual(42, (short) wrapper["mana"]);
             Assert.AreEqual(17, (short) wrapper["hp"]);
-            Assert.AreEqual("Fred", (string)wrapper["name"]);
+            Assert.AreEqual("Fred", (string) wrapper["name"]);
             Assert.AreEqual(true, (bool) wrapper["friendly"]);
             //TODO support for vector
-            var inventoryAsArray = (byte[])wrapper["inventory"];
+            var inventoryAsArray = (byte[]) wrapper["inventory"];
             Assert.AreEqual(2, inventoryAsArray.Length);
-            Assert.AreEqual((byte)2, inventoryAsArray[0]);
-            Assert.AreEqual((byte)3, inventoryAsArray[1]);
-            Assert.AreEqual((byte)2, (byte)wrapper["color"]);
+            Assert.AreEqual((byte) 2, inventoryAsArray[0]);
+            Assert.AreEqual((byte) 3, inventoryAsArray[1]);
+            Assert.AreEqual((byte) 2, (byte) wrapper["color"]);
             var minionsAsArray = (FlatBufferWrapper[]) wrapper["minions"];
-            Assert.AreEqual("Banana", (string)minionsAsArray[0]["name"]);
-            Assert.AreEqual("Ananab", (string)minionsAsArray[1]["name"]);
+            Assert.AreEqual("Banana", (string) minionsAsArray[0]["name"]);
+            Assert.AreEqual("Ananab", (string) minionsAsArray[1]["name"]);
+            Assert.AreEqual("MainMinion", (string) ((FlatBufferWrapper)wrapper["mainMinion"])["name"]);
         }
 
         [TestMethod]
