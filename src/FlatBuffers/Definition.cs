@@ -1,4 +1,7 @@
+using System;
+
 namespace FlatBuffers {
+    [Serializable]
     public abstract class Definition {
         public abstract void Compile();
 

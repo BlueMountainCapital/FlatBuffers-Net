@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 
 namespace FlatBuffers {
+    [Serializable]
     public class StructDef : Definition {
         public void PadLastField(int minAlign) {
             var padding = PaddingBytes(ByteSize, minAlign);

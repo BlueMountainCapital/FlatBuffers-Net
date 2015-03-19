@@ -6,7 +6,7 @@ namespace FlatBuffers.Test
 {
     [TestClass]
     public class RuntimeTypeModelTest {
-        private TypeBuilder _typeBuilder = new TypeBuilder();
+        internal TypeBuilder _typeBuilder = new TypeBuilder();
 
         public void CreateMonsterFlatBufferTypes() {
             if (_typeBuilder.Structs.Count > 0) return;
@@ -78,7 +78,7 @@ namespace FlatBuffers.Test
             Assert.AreEqual(16, monster_color.Value.offset);
         }
 
-        private FlatBufferWrapper GetMonsterWrapper(TypeBuilder typeBuilder) {
+        internal FlatBufferWrapper GetMonsterWrapper(TypeBuilder typeBuilder) {
             var builder = new FlatBufferBuilder(1);
             var builderWrapper = new FlatBufferBuilderWrapper(typeBuilder, builder);
             var monsterName = builderWrapper.CreateString("Fred");

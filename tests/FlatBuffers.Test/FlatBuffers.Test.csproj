@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="ParserTest.cs" />
     <Compile Include="RuntimeTypeModelTest.cs" />
+    <Compile Include="SerializationTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\FlatBuffers\FlatBuffers.csproj">

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Text;
 
 namespace FlatBuffers {
+    [Serializable]
     public class TypeBuilder {
         public EnumDef AddUnion(string name) {
             return AddEnum(name, BaseType.UType);
