@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace FlatBuffers {
+    [Serializable]
     public class SymbolTable<T> where T : class {
         public SymbolTable() {
             Symbols = new List<T>();

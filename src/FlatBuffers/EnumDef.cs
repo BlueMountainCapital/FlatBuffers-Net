@@ -2,6 +2,7 @@ using System;
 using System.Text;
 
 namespace FlatBuffers {
+    [Serializable]
     public class EnumDef : Definition {
         public EnumVal ReverseLookup(int enumIndex, bool skipUnionDefault = true) {
             int skip = 0;

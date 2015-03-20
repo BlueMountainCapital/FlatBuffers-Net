@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace FlatBuffers {
+    [Serializable]
     public class EnumVal {
         public EnumVal() {
             DocComment = new List<string>();

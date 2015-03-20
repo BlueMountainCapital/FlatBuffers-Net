@@ -1,6 +1,8 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace FlatBuffers {
+    [Serializable]
     public class FlatBuffersType {
         public FlatBuffersType(BaseType baseType = BaseType.None, StructDef structDef = null, EnumDef enumDef = null) {
             BaseType = baseType;

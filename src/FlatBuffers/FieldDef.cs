@@ -1,6 +1,8 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace FlatBuffers {
+    [Serializable]
     public class FieldDef : Definition {
         public Value Id {
             get {

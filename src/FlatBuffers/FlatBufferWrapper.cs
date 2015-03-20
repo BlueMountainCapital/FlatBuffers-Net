@@ -2,12 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace FlatBuffers
 {
-    public class FlatBufferWrapper : Table
+    [Serializable]
+    public class FlatBufferWrapper : Table, ISerializable
     {
         public FlatBufferWrapper(TypeBuilder typeBuilder, string rootTypeName, ByteBuffer byteBuffer)
             : this(
@@ -234,5 +236,48 @@ namespace FlatBuffers
 
         public TypeBuilder TypeBuilder;
         public StructDef StructDef;
+
+        #region Serialization support
+
+        [Serializable]
+        private struct Data {
+            public StructDef StructDef;            
+            public byte[] ByteBuf;        
+        }
+
+        [Serializable]
+        protected class DataSurrogate : IObjectReference, ISerializable {
+            
+            [NonSerialized] private readonly SerializationInfo _info;
+
+            protected DataSurrogate() { }
+
+            protected DataSurrogate(SerializationInfo info, StreamingContext context) {
+                _info = info;
+            }
+
+            public object GetRealObject(StreamingContext context) {
+                var data = (Data)_info.GetValue("data", typeof(Data));
+                var buf = new ByteBuffer(data.ByteBuf);
+                return new FlatBufferWrapper(data.StructDef, buf);
+            }
+
+            // placeholder, just to capture Serialization info via special constructor
+            public void GetObjectData(SerializationInfo info, StreamingContext context) {
+                throw new NotImplementedException();
+            }
+        }
+
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) {
+            var data = new Data {  
+                StructDef = this.StructDef,
+                ByteBuf = this.bb.Data,
+            };
+
+            info.AddValue("data", data);
+            info.SetType(typeof(DataSurrogate));
+        }
+
+        #endregion
     }
 }
