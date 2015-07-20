@@ -234,8 +234,9 @@ namespace FlatBuffers
             return defaultValue;
         }
 
-        public TypeBuilder TypeBuilder;
         public StructDef StructDef;
+
+        public byte[] Bytes { get { return bb.Data; } }
 
         #region Serialization support
 
