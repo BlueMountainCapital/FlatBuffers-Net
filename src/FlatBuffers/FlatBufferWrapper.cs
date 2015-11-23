@@ -43,7 +43,6 @@ namespace FlatBuffers
                 var fieldDef = StructDef.Fields.Lookup(key);
                 return fieldDef == null ? null : Get(fieldDef);
             }
-            set { throw new NotImplementedException(); }
         }
 
         public object Get(FieldDef fieldDef) {
