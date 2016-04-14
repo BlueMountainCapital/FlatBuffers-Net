@@ -50,31 +50,31 @@ namespace FlatBuffers
             if (fieldDef.Value.type.BaseType.IsScalar()) {
                 switch (fieldDef.Value.type.BaseType) {
                     case BaseType.Bool:
-                        return StructDef.Fixed || o != 0 ? (object) (bb.Get(o + bb_pos) > 0) : null;
-                    case BaseType.Byte:                    
-                        return StructDef.Fixed || o != 0 ? (object) bb.GetSbyte(o + bb_pos) : null;
-                    case BaseType.UByte:                   
-                        return StructDef.Fixed || o != 0 ? (object) bb.Get(o + bb_pos) : null;
-                    case BaseType.Short:                   
-                        return StructDef.Fixed || o != 0 ? (object) bb.GetShort(o + bb_pos) : null;
-                    case BaseType.UShort:                  
-                        return StructDef.Fixed || o != 0 ? (object) bb.GetUshort(o + bb_pos) : null;
-                    case BaseType.Int:                     
-                        return StructDef.Fixed || o != 0 ? (object) bb.GetInt(o + bb_pos) : null;
-                    case BaseType.UInt:                    
-                        return StructDef.Fixed || o != 0 ? (object) bb.GetUint(o + bb_pos) : null;
-                    case BaseType.Long:                    
-                        return StructDef.Fixed || o != 0 ? (object) bb.GetLong(o + bb_pos) : null;
-                    case BaseType.ULong:                   
-                        return StructDef.Fixed || o != 0 ? (object) bb.GetUlong(o + bb_pos) : null;
-                    case BaseType.Float:                   
-                        return StructDef.Fixed || o != 0 ? (object) bb.GetFloat(o + bb_pos) : null;
-                    case BaseType.Double:                  
-                        return StructDef.Fixed || o != 0 ? (object) bb.GetDouble(o + bb_pos) : null;
-                    case BaseType.UType:                   
-                        return StructDef.Fixed || o != 0 ? (object) bb.Get(o + bb_pos) : null;
-                }                                          
-            }                                              
+                        return StructDef.Fixed || o != 0 ? bb.Get(o + bb_pos) > 0 : default(bool);
+                    case BaseType.Byte:
+                        return StructDef.Fixed || o != 0 ? bb.GetSbyte(o + bb_pos) : default(sbyte);
+                    case BaseType.UByte:
+                        return StructDef.Fixed || o != 0 ? bb.Get(o + bb_pos) : default(byte);
+                    case BaseType.Short:
+                        return StructDef.Fixed || o != 0 ? bb.GetShort(o + bb_pos) : default(short);
+                    case BaseType.UShort:
+                        return StructDef.Fixed || o != 0 ? bb.GetUshort(o + bb_pos) : default(ushort);
+                    case BaseType.Int:
+                        return StructDef.Fixed || o != 0 ? bb.GetInt(o + bb_pos) : default(int);
+                    case BaseType.UInt:
+                        return StructDef.Fixed || o != 0 ? bb.GetUint(o + bb_pos) : default(uint);
+                    case BaseType.Long:
+                        return StructDef.Fixed || o != 0 ? bb.GetLong(o + bb_pos) : default(long);
+                    case BaseType.ULong:
+                        return StructDef.Fixed || o != 0 ? bb.GetUlong(o + bb_pos) : default(ulong);
+                    case BaseType.Float:
+                        return StructDef.Fixed || o != 0 ? bb.GetFloat(o + bb_pos) : default(float);
+                    case BaseType.Double:
+                        return StructDef.Fixed || o != 0 ? bb.GetDouble(o + bb_pos) : default(double);
+                    case BaseType.UType:
+                        return StructDef.Fixed || o != 0 ? bb.Get(o + bb_pos) : default(byte);
+                }
+            }
             else if (fieldDef.Value.type.BaseType == BaseType.String) {
                 return StructDef.Fixed || o != 0 ? __string(o + bb_pos) : default(string);
             }
