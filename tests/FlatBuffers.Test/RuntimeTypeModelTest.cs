@@ -199,7 +199,7 @@ namespace FlatBuffers.Test
             var thingy_wrapper = (FlatBufferWrapper) wrapper["thingy"];
             Assert.IsNotNull(thingy_wrapper);
             Assert.AreEqual("Monster1", (string) thingy_wrapper["name"]);
-            Assert.AreEqual(0, (byte) thingy_wrapper["thingy_type"]); //None - not set!
+            Assert.AreEqual((byte) 0, thingy_wrapper["thingy_type"] ?? default(byte)); //None - not set!
         }
 
 
