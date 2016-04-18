@@ -90,13 +90,13 @@ namespace FlatBuffers {
 
         public StructDef GetStructDef(string structName) {
             var structDef = TypeBuilder.Structs.Lookup(structName);
-            if (structDef == null) throw new Exception();
+            if (structDef == null) throw new ArgumentException($"StructName {structName} not found.", nameof(structName));
             return structDef;
         }
 
         public FieldDef GetFieldDef(string fieldName, StructDef structDef = null) {
             var fieldDef = (structDef ?? CurrentStructDef).Fields.Lookup(fieldName);
-            if (fieldName == null) throw new Exception();
+            if (fieldName == null) throw new ArgumentException($"FieldName {fieldName} not found.", nameof(fieldName));
             return fieldDef;
         }
 
