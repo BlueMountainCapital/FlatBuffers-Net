@@ -257,5 +257,34 @@ namespace FlatBuffers.Test
             Assert.AreEqual("Pickup", (string) thingy_wrapper["name"]);
         }
 
+        [TestMethod]
+        public void NullableStruct() {
+            var typebuilder = new TypeBuilder();
+            var twoIntStruct = typebuilder.AddStruct("TwoInt");
+            twoIntStruct.AddField("a", new FlatBuffersType(BaseType.Int));
+            twoIntStruct.AddField("b", new FlatBuffersType(BaseType.Int));
+
+            var option = typebuilder.AddTable("NullableTwoInt");
+            option.AddField("Some", new FlatBuffersType(BaseType.Struct, twoIntStruct));
+
+            typebuilder.Compile();
+            
+            var builder = new FlatBufferBuilder(1);
+            var builderWrapper = new FlatBufferBuilderWrapper(typebuilder, builder);
+                        
+            builderWrapper.StartTable("NullableTwoInt");
+            //builderWrapper.AddStruct("Some", new object[] { 5, 10 });
+            //builderWrapper.("Some", new object[0]);
+            builderWrapper.Finish(builderWrapper.EndTable());
+
+            var beginData = builder.DataBuffer().position();
+            var countData = builder.DataBuffer().Length - beginData;
+            var byteBuffer = new ByteBuffer(builder.DataBuffer().Data.Skip(beginData).Take(countData).ToArray());
+            var wrapper = new FlatBufferWrapper(typebuilder, "NullableTwoInt", byteBuffer);
+
+            var wr = (FlatBufferWrapper) wrapper["Some"];
+            Assert.AreEqual(null, wr);
+
+        }
     }
 }

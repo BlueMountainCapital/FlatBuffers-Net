@@ -80,11 +80,13 @@ namespace FlatBuffers
             }
             else if (fieldDef.Value.type.BaseType == BaseType.Struct) {
                 // assuming tables for now!
-                if (fieldDef.Value.type.StructDef.Fixed) {
-                    return new FlatBufferWrapper(fieldDef.Value.type.StructDef, o + bb_pos, bb);
-                }
-                else if (o != 0) {
-                    return new FlatBufferWrapper(fieldDef.Value.type.StructDef, __indirect(o + bb_pos), bb);
+                if (StructDef.Fixed || o != 0) {
+                    if (fieldDef.Value.type.StructDef.Fixed) {
+                        return new FlatBufferWrapper(fieldDef.Value.type.StructDef, o + bb_pos, bb);
+                    }
+                    else if (o != 0) {
+                        return new FlatBufferWrapper(fieldDef.Value.type.StructDef, __indirect(o + bb_pos), bb);
+                    }
                 }
                 return null;
             }
