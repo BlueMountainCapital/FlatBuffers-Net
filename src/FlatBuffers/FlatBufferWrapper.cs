@@ -18,27 +18,30 @@ namespace FlatBuffers
                 typeBuilder,
                 rootTypeName,
                 byteBuffer.GetInt(byteBuffer.Position) + byteBuffer.Position,
-                byteBuffer) {
-            _forceDefaults = forceDefaults;
+                byteBuffer,
+                forceDefaults) {
         }
 
-        public FlatBufferWrapper(
+        private FlatBufferWrapper(
             TypeBuilder typeBuilder,
             string rootTypeName,
             int bb_pos,
-            ByteBuffer bb)
-            : this(typeBuilder.Structs.Lookup(rootTypeName), bb_pos, bb) {}
+            ByteBuffer bb,
+            bool forceDefaults)
+            : this(typeBuilder.Structs.Lookup(rootTypeName), bb_pos, bb, forceDefaults) {}
 
-        public FlatBufferWrapper(StructDef structDef, ByteBuffer bb)
+        public FlatBufferWrapper(StructDef structDef, ByteBuffer bb, bool forceDefaults = false)
             : this(
                 structDef,
                 bb.GetInt(bb.Position) + bb.Position,
-                bb) {}
+                bb,
+                forceDefaults) {}
 
-        public FlatBufferWrapper(StructDef structDef, int bb_pos, ByteBuffer bb) {
+        private FlatBufferWrapper(StructDef structDef, int bb_pos, ByteBuffer bb, bool forceDefaults) {
             this.bb_pos = bb_pos;
             this.bb = bb;
             StructDef = structDef;
+            _forceDefaults = forceDefaults;
         }
 
 
@@ -86,10 +89,10 @@ namespace FlatBuffers
                 // assuming tables for now!
                 if (StructDef.Fixed || o != 0) {
                     if (fieldDef.Value.type.StructDef.Fixed) {
-                        return new FlatBufferWrapper(fieldDef.Value.type.StructDef, o + bb_pos, bb);
+                        return new FlatBufferWrapper(fieldDef.Value.type.StructDef, o + bb_pos, bb, _forceDefaults);
                     }
                     else if (o != 0) {
-                        return new FlatBufferWrapper(fieldDef.Value.type.StructDef, __indirect(o + bb_pos), bb);
+                        return new FlatBufferWrapper(fieldDef.Value.type.StructDef, __indirect(o + bb_pos), bb, _forceDefaults);
                     }
                 }
                 return null;
@@ -120,15 +123,15 @@ namespace FlatBuffers
                     for (var i = 0; i < length; i++) {
                         if (fieldDef.Value.type.StructDef.Fixed) {
                             flatBufferWrapperArray[i] = o != 0
-                                ? new FlatBufferWrapper(fieldDef.Value.type.StructDef, __vector(o) + i*sizeof (int),
-                                    bb)
+                                ? new FlatBufferWrapper(fieldDef.Value.type.StructDef, __vector(o) + i*sizeof (int),bb, _forceDefaults)
                                 : null;
                         }
                         else {
                             flatBufferWrapperArray[i] = o != 0
                                 ? new FlatBufferWrapper(fieldDef.Value.type.StructDef,
                                     __indirect(__vector(o) + i*sizeof (int)),
-                                    bb)
+                                    bb,
+                                    _forceDefaults)
                                 : null;
                         }
                     }
