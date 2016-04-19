@@ -9,7 +9,7 @@ namespace FlatBuffers {
         }
 
         public int CreateString(string value) {
-            return Builder.CreateString(value);
+            return Builder.CreateString(value).Value;
         }
         
         public void StartTable(string typeName) {
@@ -69,7 +69,7 @@ namespace FlatBuffers {
                         throw new NotImplementedException();
                 }
             }
-            return Builder.Offset();
+            return Builder.Offset;
         }
 
         public void AddStruct(string fieldName, object[] args) {
@@ -85,7 +85,7 @@ namespace FlatBuffers {
         }
 
         public int EndVector() {
-            return Builder.EndVector();
+            return Builder.EndVector().Value;
         }
 
         public StructDef GetStructDef(string structName) {
@@ -195,11 +195,11 @@ namespace FlatBuffers {
 
         public void AddULong(string fieldName, ulong value) {
             AddValue<ulong>(fieldName, (offset, defaultValue) =>
-                Builder.AddULong(offset, value, defaultValue));
+                Builder.AddUlong(offset, value, defaultValue));
         }
 
         public void AddULong(ulong value) {
-            Builder.AddULong(value);
+            Builder.AddUlong(value);
         }
 
         public void AddFloat(string fieldName, float value) {

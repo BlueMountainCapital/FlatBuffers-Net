@@ -1,5 +1,6 @@
-﻿github google/flatbuffers:4390254e6a85bfd280829d0c2d2eb21654aca04f net/FlatBuffers/ByteBuffer.cs
-github google/flatbuffers:4390254e6a85bfd280829d0c2d2eb21654aca04f net/FlatBuffers/FlatBufferBuilder.cs
-github google/flatbuffers:4390254e6a85bfd280829d0c2d2eb21654aca04f net/FlatBuffers/FlatBufferConstants.cs
-github google/flatbuffers:4390254e6a85bfd280829d0c2d2eb21654aca04f net/FlatBuffers/Struct.cs
-github google/flatbuffers:4390254e6a85bfd280829d0c2d2eb21654aca04f net/FlatBuffers/Table.cs
+﻿github google/flatbuffers net/FlatBuffers/ByteBuffer.cs
+github google/flatbuffers net/FlatBuffers/FlatBufferBuilder.cs
+github google/flatbuffers net/FlatBuffers/FlatBufferConstants.cs
+github google/flatbuffers net/FlatBuffers/Struct.cs
+github google/flatbuffers net/FlatBuffers/Table.cs
+github google/flatbuffers net/FlatBuffers/Offset.cs

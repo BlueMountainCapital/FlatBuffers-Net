@@ -11,12 +11,16 @@ namespace FlatBuffers
     [Serializable]
     public class FlatBufferWrapper : Table, ISerializable
     {
-        public FlatBufferWrapper(TypeBuilder typeBuilder, string rootTypeName, ByteBuffer byteBuffer)
+        private readonly bool _forceDefaults = false;
+
+        public FlatBufferWrapper(TypeBuilder typeBuilder, string rootTypeName, ByteBuffer byteBuffer, bool forceDefaults = false)
             : this(
                 typeBuilder,
                 rootTypeName,
-                byteBuffer.GetInt(byteBuffer.position()) + byteBuffer.position(),
-                byteBuffer) {}
+                byteBuffer.GetInt(byteBuffer.Position) + byteBuffer.Position,
+                byteBuffer) {
+            _forceDefaults = forceDefaults;
+        }
 
         public FlatBufferWrapper(
             TypeBuilder typeBuilder,
@@ -28,7 +32,7 @@ namespace FlatBuffers
         public FlatBufferWrapper(StructDef structDef, ByteBuffer bb)
             : this(
                 structDef,
-                bb.GetInt(bb.position()) + bb.position(),
+                bb.GetInt(bb.Position) + bb.Position,
                 bb) {}
 
         public FlatBufferWrapper(StructDef structDef, int bb_pos, ByteBuffer bb) {
@@ -50,29 +54,29 @@ namespace FlatBuffers
             if (fieldDef.Value.type.BaseType.IsScalar()) {
                 switch (fieldDef.Value.type.BaseType) {
                     case BaseType.Bool:
-                        return StructDef.Fixed || o != 0 ? bb.Get(o + bb_pos) > 0 : default(bool);
+                        return StructDef.Fixed || o != 0 ? bb.Get(o + bb_pos) > 0 : _forceDefaults ? null : (object) default(bool);
                     case BaseType.Byte:
-                        return StructDef.Fixed || o != 0 ? bb.GetSbyte(o + bb_pos) : default(sbyte);
+                        return StructDef.Fixed || o != 0 ? bb.GetSbyte(o + bb_pos) : _forceDefaults ? null : (object)default(sbyte);
                     case BaseType.UByte:
-                        return StructDef.Fixed || o != 0 ? bb.Get(o + bb_pos) : default(byte);
+                        return StructDef.Fixed || o != 0 ? bb.Get(o + bb_pos) : _forceDefaults ? null : (object)default(byte);
                     case BaseType.Short:
-                        return StructDef.Fixed || o != 0 ? bb.GetShort(o + bb_pos) : default(short);
+                        return StructDef.Fixed || o != 0 ? bb.GetShort(o + bb_pos) : _forceDefaults ? null : (object)default(short);
                     case BaseType.UShort:
-                        return StructDef.Fixed || o != 0 ? bb.GetUshort(o + bb_pos) : default(ushort);
+                        return StructDef.Fixed || o != 0 ? bb.GetUshort(o + bb_pos) : _forceDefaults ? null : (object)default(ushort);
                     case BaseType.Int:
-                        return StructDef.Fixed || o != 0 ? bb.GetInt(o + bb_pos) : default(int);
+                        return StructDef.Fixed || o != 0 ? bb.GetInt(o + bb_pos) : _forceDefaults ? null : (object)default(int);
                     case BaseType.UInt:
-                        return StructDef.Fixed || o != 0 ? bb.GetUint(o + bb_pos) : default(uint);
+                        return StructDef.Fixed || o != 0 ? bb.GetUint(o + bb_pos) : _forceDefaults ? null : (object)default(uint);
                     case BaseType.Long:
-                        return StructDef.Fixed || o != 0 ? bb.GetLong(o + bb_pos) : default(long);
+                        return StructDef.Fixed || o != 0 ? bb.GetLong(o + bb_pos) : _forceDefaults ? null : (object)default(long);
                     case BaseType.ULong:
-                        return StructDef.Fixed || o != 0 ? bb.GetUlong(o + bb_pos) : default(ulong);
+                        return StructDef.Fixed || o != 0 ? bb.GetUlong(o + bb_pos) : _forceDefaults ? null : (object)default(ulong);
                     case BaseType.Float:
-                        return StructDef.Fixed || o != 0 ? bb.GetFloat(o + bb_pos) : default(float);
+                        return StructDef.Fixed || o != 0 ? bb.GetFloat(o + bb_pos) : _forceDefaults ? null : (object)default(float);
                     case BaseType.Double:
-                        return StructDef.Fixed || o != 0 ? bb.GetDouble(o + bb_pos) : default(double);
+                        return StructDef.Fixed || o != 0 ? bb.GetDouble(o + bb_pos) : _forceDefaults ? null : (object)default(double);
                     case BaseType.UType:
-                        return StructDef.Fixed || o != 0 ? bb.Get(o + bb_pos) : default(byte);
+                        return StructDef.Fixed || o != 0 ? bb.Get(o + bb_pos) : _forceDefaults ? null : (object)default(byte);
                 }
             }
             else if (fieldDef.Value.type.BaseType == BaseType.String) {

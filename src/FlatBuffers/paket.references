@@ -3,3 +3,4 @@ File:FlatBufferBuilder.cs Runtime
 File:FlatBufferConstants.cs Runtime
 File:Struct.cs Runtime
 File:Table.cs Runtime
+File:Offset.cs Runtime

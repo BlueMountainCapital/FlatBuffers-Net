@@ -2,8 +2,9 @@
 GITHUB
   remote: google/flatbuffers
   specs:
-    net/FlatBuffers/ByteBuffer.cs (4390254e6a85bfd280829d0c2d2eb21654aca04f)
-    net/FlatBuffers/FlatBufferBuilder.cs (4390254e6a85bfd280829d0c2d2eb21654aca04f)
-    net/FlatBuffers/FlatBufferConstants.cs (4390254e6a85bfd280829d0c2d2eb21654aca04f)
-    net/FlatBuffers/Struct.cs (4390254e6a85bfd280829d0c2d2eb21654aca04f)
-    net/FlatBuffers/Table.cs (4390254e6a85bfd280829d0c2d2eb21654aca04f)
+    net/FlatBuffers/ByteBuffer.cs (791c83aa7e3bfee37ff592cb80910caead5f625c)
+    net/FlatBuffers/FlatBufferBuilder.cs (791c83aa7e3bfee37ff592cb80910caead5f625c)
+    net/FlatBuffers/FlatBufferConstants.cs (791c83aa7e3bfee37ff592cb80910caead5f625c)
+    net/FlatBuffers/Offset.cs (791c83aa7e3bfee37ff592cb80910caead5f625c)
+    net/FlatBuffers/Struct.cs (791c83aa7e3bfee37ff592cb80910caead5f625c)
+    net/FlatBuffers/Table.cs (791c83aa7e3bfee37ff592cb80910caead5f625c)

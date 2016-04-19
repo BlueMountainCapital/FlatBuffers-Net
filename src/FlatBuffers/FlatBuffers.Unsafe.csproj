@@ -35,6 +35,10 @@
     <RootNamespace>FlatBuffers</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\..\paket-files\google\flatbuffers\net\FlatBuffers\Offset.cs">
+      <Paket>True</Paket>
+      <Link>Runtime/Offset.cs</Link>
+    </Compile>
     <Compile Include="..\..\paket-files\google\flatbuffers\net\FlatBuffers\ByteBuffer.cs">
       <Paket>True</Paket>
       <Link>Runtime/ByteBuffer.cs</Link>

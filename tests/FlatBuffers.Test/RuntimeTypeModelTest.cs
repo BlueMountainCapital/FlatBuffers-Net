@@ -113,9 +113,9 @@ namespace FlatBuffers.Test
             builderWrapper.AddVector("minions", minions);
             builderWrapper.AddTable("mainMinion", mainMinion);
             builderWrapper.Finish(builderWrapper.EndTable());
-            var beginData = builder.DataBuffer().position();
-            var countData = builder.DataBuffer().Length - beginData;
-            var byteBuffer = new ByteBuffer(builder.DataBuffer().Data.Skip(beginData).Take(countData).ToArray());
+            var beginData = builder.DataBuffer.Position;
+            var countData = builder.DataBuffer.Length - beginData;
+            var byteBuffer = new ByteBuffer(builder.DataBuffer.Data.Skip(beginData).Take(countData).ToArray());
             return new FlatBufferWrapper(_typeBuilder, "Monster", byteBuffer);
         }
 
@@ -189,9 +189,9 @@ namespace FlatBuffers.Test
             builderWrapper.AddByte("thingy_type", 1); // Monster
             builderWrapper.AddTable("thingy", monster1);
             builderWrapper.Finish(builderWrapper.EndTable());
-            var beginData = builder.DataBuffer().position();
-            var countData = builder.DataBuffer().Length - beginData;
-            var byteBuffer = new ByteBuffer(builder.DataBuffer().Data.Skip(beginData).Take(countData).ToArray());
+            var beginData = builder.DataBuffer.Position;
+            var countData = builder.DataBuffer.Length - beginData;
+            var byteBuffer = new ByteBuffer(builder.DataBuffer.Data.Skip(beginData).Take(countData).ToArray());
             var wrapper = new FlatBufferWrapper(_typeBuilder, "Monster", byteBuffer);
 
             Assert.AreEqual("Monster2", (string) wrapper["name"]);
@@ -218,9 +218,9 @@ namespace FlatBuffers.Test
             builderWrapper.AddTable("thingy", weapon);
             builderWrapper.AddString("name", monster_name);
             builderWrapper.Finish(builderWrapper.EndTable());
-            var beginData = builder.DataBuffer().position();
-            var countData = builder.DataBuffer().Length - beginData;
-            var byteBuffer = new ByteBuffer(builder.DataBuffer().Data.Skip(beginData).Take(countData).ToArray());
+            var beginData = builder.DataBuffer.Position;
+            var countData = builder.DataBuffer.Length - beginData;
+            var byteBuffer = new ByteBuffer(builder.DataBuffer.Data.Skip(beginData).Take(countData).ToArray());
             var wrapper = new FlatBufferWrapper(_typeBuilder, "Monster", byteBuffer);
 
             Assert.AreEqual("Monster2", (string) wrapper["name"]);
@@ -245,9 +245,9 @@ namespace FlatBuffers.Test
             builderWrapper.AddTable("thingy", pickup);
             builderWrapper.AddString("name", monster_name);
             builderWrapper.Finish(builderWrapper.EndTable());
-            var beginData = builder.DataBuffer().position();
-            var countData = builder.DataBuffer().Length - beginData;
-            var byteBuffer = new ByteBuffer(builder.DataBuffer().Data.Skip(beginData).Take(countData).ToArray());
+            var beginData = builder.DataBuffer.Position;
+            var countData = builder.DataBuffer.Length - beginData;
+            var byteBuffer = new ByteBuffer(builder.DataBuffer.Data.Skip(beginData).Take(countData).ToArray());
             var wrapper = new FlatBufferWrapper(_typeBuilder, "Monster", byteBuffer);
 
             Assert.AreEqual("Monster2", (string) wrapper["name"]);
@@ -277,13 +277,97 @@ namespace FlatBuffers.Test
             //builderWrapper.("Some", new object[0]);
             builderWrapper.Finish(builderWrapper.EndTable());
 
-            var beginData = builder.DataBuffer().position();
-            var countData = builder.DataBuffer().Length - beginData;
-            var byteBuffer = new ByteBuffer(builder.DataBuffer().Data.Skip(beginData).Take(countData).ToArray());
+            var beginData = builder.DataBuffer.Position;
+            var countData = builder.DataBuffer.Length - beginData;
+            var byteBuffer = new ByteBuffer(builder.DataBuffer.Data.Skip(beginData).Take(countData).ToArray());
             var wrapper = new FlatBufferWrapper(typebuilder, "NullableTwoInt", byteBuffer);
 
             var wr = (FlatBufferWrapper) wrapper["Some"];
             Assert.AreEqual(null, wr);
+
+        }
+
+        [TestMethod]
+        public void NullableStructSome() {
+            var typebuilder = new TypeBuilder();
+            var twoIntStruct = typebuilder.AddStruct("TwoInt");
+            twoIntStruct.AddField("a", new FlatBuffersType(BaseType.Int));
+            twoIntStruct.AddField("b", new FlatBuffersType(BaseType.Int));
+
+            var option = typebuilder.AddTable("NullableTwoInt");
+            option.AddField("Some", new FlatBuffersType(BaseType.Struct, twoIntStruct));
+
+            typebuilder.Compile();
+
+            var builder = new FlatBufferBuilder(1);
+            var builderWrapper = new FlatBufferBuilderWrapper(typebuilder, builder);
+
+            builderWrapper.StartTable("NullableTwoInt");
+            builderWrapper.AddStruct("Some", new object[] { 5, 10 });
+            builderWrapper.Finish(builderWrapper.EndTable());
+
+            var beginData = builder.DataBuffer.Position;
+            var countData = builder.DataBuffer.Length - beginData;
+            var byteBuffer = new ByteBuffer(builder.DataBuffer.Data.Skip(beginData).Take(countData).ToArray());
+            var wrapper = new FlatBufferWrapper(typebuilder, "NullableTwoInt", byteBuffer);
+
+            var wr = (FlatBufferWrapper)wrapper["Some"];
+            Assert.AreEqual(5, wr["a"]);
+            Assert.AreEqual(10, wr["b"]);
+
+        }
+
+        [TestMethod]
+        public void NullableIntNone() {
+            var typebuilder = new TypeBuilder();
+
+            var option = typebuilder.AddTable("NullableInt");
+            option.AddField("Some", new FlatBuffersType(BaseType.Int));
+
+            typebuilder.Compile();
+
+            var builder = new FlatBufferBuilder(1);
+            builder.ForceDefaults = true;
+            var builderWrapper = new FlatBufferBuilderWrapper(typebuilder, builder);
+
+            builderWrapper.StartTable("NullableInt");
+            builderWrapper.Finish(builderWrapper.EndTable());
+
+            var beginData = builder.DataBuffer.Position;
+            var countData = builder.DataBuffer.Length - beginData;
+            var byteBuffer = new ByteBuffer(builder.DataBuffer.Data.Skip(beginData).Take(countData).ToArray());
+            var wrapper = new FlatBufferWrapper(typebuilder, "NullableInt", byteBuffer, true);
+
+            var wr = wrapper["Some"];
+            Assert.AreEqual(null, wr);
+
+        }
+
+        [TestMethod]
+        public void NullableIntSome() {
+            var typebuilder = new TypeBuilder();
+
+            var option = typebuilder.AddTable("NullableInt");
+            option.AddField("Some", new FlatBuffersType(BaseType.Int));
+
+            typebuilder.Compile();
+
+            var builder = new FlatBufferBuilder(1);
+            builder.ForceDefaults = true;
+            var builderWrapper = new FlatBufferBuilderWrapper(typebuilder, builder);
+
+            builderWrapper.StartTable("NullableInt");
+            builderWrapper.AddInt("Some", 5);
+            //builderWrapper.("Some", new object[0]);
+            builderWrapper.Finish(builderWrapper.EndTable());
+
+            var beginData = builder.DataBuffer.Position;
+            var countData = builder.DataBuffer.Length - beginData;
+            var byteBuffer = new ByteBuffer(builder.DataBuffer.Data.Skip(beginData).Take(countData).ToArray());
+            var wrapper = new FlatBufferWrapper(typebuilder, "NullableInt", byteBuffer, true);
+
+            var wr = wrapper["Some"];
+            Assert.AreEqual(5, wr);
 
         }
     }
