@@ -120,15 +120,16 @@ namespace FlatBuffers
                 else if (fieldDef.Value.type.ElementType == BaseType.Struct) {
                     var length = o != 0 ? __vector_len(o) : 0;
                     var flatBufferWrapperArray = new FlatBufferWrapper[length];
+                    var elemStructDef = fieldDef.Value.type.StructDef;
                     for (var i = 0; i < length; i++) {
-                        if (fieldDef.Value.type.StructDef.Fixed) {
+                        if (elemStructDef.Fixed) {
                             flatBufferWrapperArray[i] = o != 0
-                                ? new FlatBufferWrapper(fieldDef.Value.type.StructDef, __vector(o) + i*sizeof (int),bb, _forceDefaults)
+                                ? new FlatBufferWrapper(elemStructDef, __vector(o) + i*elemStructDef.ByteSize,bb, _forceDefaults)
                                 : null;
                         }
                         else {
                             flatBufferWrapperArray[i] = o != 0
-                                ? new FlatBufferWrapper(fieldDef.Value.type.StructDef,
+                                ? new FlatBufferWrapper(elemStructDef,
                                     __indirect(__vector(o) + i*sizeof (int)),
                                     bb,
                                     _forceDefaults)

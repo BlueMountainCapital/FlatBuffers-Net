@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections;
+using System;
 
 namespace FlatBuffers.Test
 {
@@ -258,6 +260,49 @@ namespace FlatBuffers.Test
         }
 
         [TestMethod]
+        public void VectorOfStruct() {
+            var typebuilder = new TypeBuilder();
+            var elemStruct = typebuilder.AddStruct("Stuff");
+            elemStruct.AddField("a", new FlatBuffersType(BaseType.Int));
+            elemStruct.AddField("b", new FlatBuffersType(BaseType.Int));
+            elemStruct.AddField("c", new FlatBuffersType(BaseType.Double));
+
+            var root = typebuilder.AddTable("Root");
+            var vectorField = root.AddField("vector", new FlatBuffersType(BaseType.Vector, elemStruct) { ElementType = BaseType.Struct });
+
+            typebuilder.Compile();
+
+            var builder = new FlatBufferBuilder(1);
+            var builderWrapper = new FlatBufferBuilderWrapper(typebuilder, builder);
+
+            builderWrapper.StartVector(root.Name, vectorField.Name, 2);
+
+            var expected = new object[][] {
+                new object[] { 1, 2, 1.2345 },
+                new object[] { 3, 4, 5.6780 },
+            };
+
+            var i1 = builderWrapper.CreateStruct(elemStruct.Name, expected[1]);
+            var i2 = builderWrapper.CreateStruct(elemStruct.Name, expected[0]);
+            var offset = builderWrapper.EndVector();
+
+            builderWrapper.StartTable(root.Name);
+            builderWrapper.AddVector(vectorField.Name, offset);
+            builderWrapper.Finish(builderWrapper.EndTable());
+
+            var beginData = builder.DataBuffer.Position;
+            var countData = builder.DataBuffer.Length - beginData;
+            var byteBuffer = new ByteBuffer(builder.DataBuffer.Data.Skip(beginData).Take(countData).ToArray());
+            var wrapper = new FlatBufferWrapper(typebuilder, root.Name, byteBuffer);
+            
+            var elemsUntyped = (IEnumerable)wrapper[vectorField.Name];
+            var actual = elemsUntyped.Cast<FlatBufferWrapper>().Select(wr => new[] { wr["a"], wr["b"], wr["c"] }).ToArray();
+            CollectionAssert.AreEquivalent(expected[0], actual[0]);
+            CollectionAssert.AreEquivalent(expected[1], actual[1]);
+
+        }
+
+        [TestMethod]
         public void NullableStruct() {
             var typebuilder = new TypeBuilder();
             var twoIntStruct = typebuilder.AddStruct("TwoInt");
@@ -273,8 +318,7 @@ namespace FlatBuffers.Test
             var builderWrapper = new FlatBufferBuilderWrapper(typebuilder, builder);
                         
             builderWrapper.StartTable("NullableTwoInt");
-            //builderWrapper.AddStruct("Some", new object[] { 5, 10 });
-            //builderWrapper.("Some", new object[0]);
+            //write nothing
             builderWrapper.Finish(builderWrapper.EndTable());
 
             var beginData = builder.DataBuffer.Position;
